@@ -1,0 +1,8 @@
+{
+  "name": "iceportal-status",
+  "description": "DIsplays the current speed of the ICE in the status bar",
+  "uuid": "iceportal@bartzi.de",
+  "shell-version": [
+    "40"
+  ]
+}
