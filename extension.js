@@ -75,6 +75,8 @@ class Extension {
 
         this.label.destroy();
         this.label = null;
+
+        Mainloop.source_remove(this.timeout);
         this.timeout = null;
 
         Mainloop.source_remove(timeout);
