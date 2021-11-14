@@ -27,23 +27,24 @@ class Extension {
         );
     
         proc.communicate_utf8_async(null, null, (proc, res) => {
+            let speed;
             try {
                 let [, stdout, stderr] = proc.communicate_utf8_finish(res);
     
                 if (proc.get_successful()) {
                     let jsonData = JSON.parse(stdout);
-                    const speed = jsonData.speed;
+                    speed = jsonData.speed;
 
-                    this.label.set_text(`${speed} km/h`);
                     this.queueUpdate();
                 } else {
                     throw new Error(stderr);
                 }
             } catch (e) {
                 logError(e);
+                speed = "-"
             }
-        });        
-        
+            this.label.set_text(`${speed} km/h`);
+        });
     }
 
     queueUpdate() {
@@ -58,7 +59,7 @@ class Extension {
 
         let indicatorName = `${Me.metadata.name} Indicator`;
         this._indicator = new PanelMenu.Button(0.0, indicatorName, false);
-        this.label = new St.Label({style_class: 'iceportal-label', text: `0 km/h`});
+        this.label = new St.Label({style_class: 'iceportal-label', text: `- km/h`});
         this._indicator.add_child(this.label);
         Main.panel.addToStatusArea(indicatorName, this._indicator);
         this.updateSpeed();
@@ -78,8 +79,6 @@ class Extension {
 
         Mainloop.source_remove(this.timeout);
         this.timeout = null;
-
-        Mainloop.source_remove(timeout);
     }
 }
 
