@@ -6,6 +6,8 @@ This extension for the Gnome Shell allows you to receive the current speed of yo
 No more looking up to know how fast you are going :muscle:. 
 Who knows, maybe this extension even allows for more information in the future?
 
+![location in TopBar](images/current_indicator.png)
+
 ## Installation
 
 Installation is quite simple:
