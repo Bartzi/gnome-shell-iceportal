@@ -1,15 +1,12 @@
 const St = imports.gi.St;
-const Gio = imports.gi.Gio;
+const Soup = imports.gi.Soup;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
-const Panel = imports.ui.panel;
 
-const ByteArray = imports.byteArray;
 const Mainloop = imports.mainloop;
-const GLib = imports.gi.GLib;
 
 const url = "https://iceportal.de/api1/rs/status/";
 
@@ -21,30 +18,25 @@ class Extension {
     }
 
     updateSpeed() {
-        let proc = Gio.Subprocess.new(
-            ['curl', url],
-            Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE
-        );
-    
-        proc.communicate_utf8_async(null, null, (proc, res) => {
-            let speed;
-            try {
-                let [, stdout, stderr] = proc.communicate_utf8_finish(res);
-    
-                if (proc.get_successful()) {
-                    let jsonData = JSON.parse(stdout);
-                    speed = jsonData.speed;
+        const session = new Soup.Session({});
 
-                    this.queueUpdate();
+        session.user_agent = "ICEPortal Gnome";
+        session.queue_message(
+            Soup.Message.new_from_uri("GET", Soup.URI.new(url)),
+            (session, message) => {
+                let speed = "-";
+
+                if (message.status_code === 200) {
+                    let jsonData = JSON.parse(message.response_body.data);
+                    speed = jsonData.speed;
                 } else {
-                    throw new Error(stderr);
+                    logError(message.response_body.data);
                 }
-            } catch (e) {
-                logError(e);
-                speed = "-"
+
+                this.label.set_text(`${speed} km/h`);
+                this.queueUpdate();
             }
-            this.label.set_text(`${speed} km/h`);
-        });
+        );
     }
 
     queueUpdate() {

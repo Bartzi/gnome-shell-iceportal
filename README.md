@@ -11,7 +11,6 @@ Who knows, maybe this extension even allows for more information in the future?
 ## Installation
 
 Installation is quite simple:
-1. Install `curl` (I'm sorry about this dependency but I could not make requests with Soup work until now...)
 1. Copy/or checkout the repository into the following directory: `~/.local/share/gnome-shell/extensions/iceportal@bartzi.de`.
 1. reload the session (on X) or logout and login again (on Wayland)
 1. Connect to the WiFi on your ICE
