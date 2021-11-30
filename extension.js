@@ -28,10 +28,15 @@ class Extension {
                 let speed = "-";
 
                 if (message.status_code === 200) {
-                    let jsonData = JSON.parse(message.response_body.data);
+                    try {
+                        const jsonData = JSON.parse(message.response_body.data);
                     speed = jsonData.speed;
+                    } catch (exception) {
+                        log(message.response_body.data);
+                        logError(exception);    
+                    }
                 } else {
-                    logError(message.response_body.data);
+                    log(message.response_body.data);
                 }
 
                 this.label.set_text(`${speed} km/h`);
@@ -56,7 +61,6 @@ class Extension {
         this._indicator.add_child(this.label);
         Main.panel.addToStatusArea(indicatorName, this._indicator);
         this.updateSpeed();
-        this.queueUpdate();
     }
     
     // REMINDER: It's required for extensions to clean up after themselves when
