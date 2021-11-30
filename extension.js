@@ -71,11 +71,11 @@ class Extension {
     disable() {
         log(`disabling ${Me.metadata.name}`);
 
-        this._indicator.destroy();
-        this._indicator = null;
-
         this.label.destroy();
         this.label = null;
+
+        this._indicator.destroy();
+        this._indicator = null;
 
         Mainloop.source_remove(this.timeout);
         this.timeout = null;
