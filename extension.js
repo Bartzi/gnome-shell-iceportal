@@ -22,15 +22,18 @@ class Extension {
         const session = new Soup.Session({});
 
         session.user_agent = "ICEPortal Gnome";
+
+        const message = Soup.Message.new_from_uri("GET", Soup.URI.new(url));
+        message.request_headers.append("Accept", "application/json");
         session.queue_message(
-            Soup.Message.new_from_uri("GET", Soup.URI.new(url)),
+            message,
             (session, message) => {
                 let speed = "-";
 
                 if (message.status_code === 200) {
                     try {
                         const jsonData = JSON.parse(message.response_body.data);
-                    speed = jsonData.speed;
+                        speed = jsonData.speed;
                     } catch (exception) {
                         log(message.response_body.data);
                         logError(exception);    
