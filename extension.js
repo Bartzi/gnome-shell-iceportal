@@ -1,4 +1,5 @@
 const St = imports.gi.St;
+const Clutter = imports.gi.Clutter;
 const Soup = imports.gi.Soup;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -51,7 +52,7 @@ class Extension {
 
         let indicatorName = `${Me.metadata.name} Indicator`;
         this._indicator = new PanelMenu.Button(0.0, indicatorName, false);
-        this.label = new St.Label({style_class: 'iceportal-label', text: `- km/h`});
+        this.label = new St.Label({style_class: 'iceportal-label', text: `- km/h`, y_align: Clutter.ActorAlign.CENTER});
         this._indicator.add_child(this.label);
         Main.panel.addToStatusArea(indicatorName, this._indicator);
         this.updateSpeed();
